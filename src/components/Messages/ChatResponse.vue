@@ -54,13 +54,11 @@
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </v-card-title>
-    <Markdown
-      v-if="props.messages.length === 1"
-      class="markdown-body"
-      :breaks="true"
-      :html="messages[0].format === 'html'"
-      :source="messages[0].content"
-      @click="handleClick"
+    <v-md-preview
+        v-if="props.messages.length === 1"
+        class="markdown-body"
+        :text="messages[0].content"
+        @copy-code-success="copyCodeSuccess"
     />
     <v-carousel
       v-else
@@ -92,6 +90,7 @@ import Markdown from "vue3-markdown-it";
 import { useMatomo } from "@/composables/matomo";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import bots from "@/bots";
+import {ElMessage} from 'element-plus';
 
 const props = defineProps({
   messages: {
@@ -150,6 +149,13 @@ watch(
 onMounted(() => {
   root.value.$el.style.setProperty("--columns", props.columns);
 });
+
+function copyCodeSuccess() {
+    ElMessage({
+        message: '复制成功',
+        type: 'success',
+    });
+}
 
 function copyToClipboard() {
   let content = props.messages[carouselModel.value].content;

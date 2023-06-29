@@ -6,7 +6,6 @@ import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 import { useI18n } from "vue-i18n";
 import "material-design-icons/iconfont/material-icons.css";
 import VueMatomo from "vue-matomo";
-import VueShortkey from 'vue3-shortkey';
 import { resolveTheme, applyTheme } from "./theme";
 
 // Vuetify
@@ -14,6 +13,33 @@ import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+
+// element-plus 组件库
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+
+import VMdPreview from '@kangc/v-md-editor/lib/preview';
+import '@kangc/v-md-editor/lib/style/preview.css';
+// VuePress主题以及样式（这里也可以选择github主题）
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+// 显示代码行数
+import createLineNumbertPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index';
+// 快速复制代码
+import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
+import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
+// Prism
+import Prism from 'prismjs';
+// 代码高亮
+import 'prismjs/components/prism-json';
+
+// 选择使用主题
+VMdPreview
+    .use(vuepressTheme, {
+        Prism,
+    })
+    .use(createLineNumbertPlugin())
+    .use(createCopyCodePlugin());
 
 const { ipcRenderer } = window.require("electron");
 
@@ -77,7 +103,8 @@ createApp(App)
   .use(i18n)
   .use(store)
   .use(vuetify)
-  .use(VueShortkey)
+  .use(ElementPlus)
+  .use(VMdPreview)
   .use(VueMatomo, {
     // Configure your matomo server and site by providing
     host: "https://matomo.chatall.ai/",
